@@ -1,21 +1,23 @@
 {
     "version": 2,
-    "buildCommand": "cd frontend_remix && npm install && npm run build",
-    "outputDirectory": "frontend_remix/public",
-    "framework": null,
-    "functions": {
-      "backend_django/wsgi.py": {
-        "runtime": "vercel-python@3.9"
+    "builds": [
+      {
+        "src": "backend_django/wsgi.py",
+        "use": "@vercel/python"
+      },
+      {
+        "src": "frontend_remix/build/**",
+        "use": "@vercel/static"
       }
-    },
+    ],
     "routes": [
       {
         "src": "/api/(.*)",
-        "dest": "/backend_django/wsgi.py"
+        "dest": "backend_django/wsgi.py"
       },
       {
         "src": "/(.*)",
-        "dest": "/$1"
+        "dest": "frontend_remix/build/$1"
       }
     ]
   }
