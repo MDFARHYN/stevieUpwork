@@ -1,0 +1,22 @@
+{
+    "builds": [
+      {
+        "src": "backend_django/wsgi.py",
+        "use": "@vercel/python"
+      },
+      {
+        "src": "frontend_remix/build/**",
+        "use": "@vercel/static"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "backend_django/wsgi.py"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "frontend_remix/build/$1"
+      }
+    ]
+  }
