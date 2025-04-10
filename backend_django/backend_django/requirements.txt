@@ -1,0 +1,16 @@
+Django
+djangorestframework
+djangorestframework-simplejwt[crypto]
+django-cors-headers
+django-filter
+Pillow
+psycopg2-binary
+python-dotenv
+gunicorn
+whitenoise
+dj-database-url
+requests
+channels
+channels-redis
+daphne
+django-cleanup
