@@ -1,12 +1,14 @@
 {
+    "version": 2,
     "builds": [
       {
         "src": "backend_django/wsgi.py",
-        "use": "@vercel/python"
+        "use": "@vercel/python",
+        "config": { "maxLambdaSize": "15mb" }
       },
       {
-        "src": "frontend_remix/build/**",
-        "use": "@vercel/static"
+        "src": "frontend_remix/package.json",
+        "use": "@vercel/node"
       }
     ],
     "routes": [
@@ -16,7 +18,7 @@
       },
       {
         "src": "/(.*)",
-        "dest": "frontend_remix/build/$1"
+        "dest": "frontend_remix/$1"
       }
     ]
   }
