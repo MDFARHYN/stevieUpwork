@@ -31,7 +31,7 @@ COPY --from=builder /app/package-lock.json /app/package-lock.json
 RUN npm ci --only=production
 
 # Expose the port
-EXPOSE 3000
+EXPOSE 3001
 
 # Start the app
 CMD ["npm", "start"]

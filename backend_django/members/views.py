@@ -104,6 +104,7 @@ def user_login(request):
         value=str(refresh),
         samesite='Lax',
         secure=False,
+        domain='backendstevie.farhyn.com',
         max_age=3600 * 24 * 14  # 14 days
     )
     
@@ -111,6 +112,7 @@ def user_login(request):
         key='access_token',
         value=str(access_token),
         samesite='Lax',
+        domain='backendstevie.farhyn.com',
         secure=False,
         max_age=3600  # 1 hour
     )
