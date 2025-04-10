@@ -189,5 +189,5 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://backendstevie.farhyn.com",
-    "https://stevie-upwork-git-main-farhanahmed1360gmailcoms-projects.vercel.app/",  # Include this if you also access the backend directly via IP
+    "https://stevie.farhyn.com",  # Include this if you also access the backend directly via IP
 ]
