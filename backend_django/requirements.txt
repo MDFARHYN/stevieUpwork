@@ -16,4 +16,3 @@ channels-redis
 daphne
 django-cleanup
 pandas
-vercel-python-wsgi
