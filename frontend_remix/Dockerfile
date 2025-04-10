@@ -1,23 +1,37 @@
-# Use an official Node.js runtime as the base image
-FROM node:18-slim
+FROM node:22.14.0-alpine AS builder
 
-# Set working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package.json package-lock.json* ./
-
 # Install dependencies
-RUN npm install --production
+COPY package.json package-lock.json* ./
+RUN npm ci
 
-# Copy the rest of the Remix project
+# Copy application code
 COPY . .
 
-# Build the Remix app
+# Build the app
 RUN npm run build
 
-# Expose the port Remix will run on
-EXPOSE 3001
+# Production image
+FROM node:22.14.0-alpine AS production
 
-# Command to run the application
+WORKDIR /app
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=3001
+
+# Copy built assets and package files
+COPY --from=builder /app/build /app/build
+COPY --from=builder /app/public /app/public
+COPY --from=builder /app/package.json /app/package.json
+COPY --from=builder /app/package-lock.json /app/package-lock.json
+
+# Install only production dependencies
+RUN npm ci --only=production
+
+# Expose the port
+EXPOSE 3000
+
+# Start the app
 CMD ["npm", "start"]

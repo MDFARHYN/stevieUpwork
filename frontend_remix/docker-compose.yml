@@ -1,17 +1,28 @@
 version: '3.8'
 
 services:
-  remix:
+   
+  remix-app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: stevie-remix-app
-    ports:
-      - "3001:3001"
-    
+      target: production
+    container_name: frontend_remix
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    expose:
+      - "3001"
     networks:
       - my_custom_network
+    volumes:
+      # If you need to persist any data
+      - ./data:/app/data
+      # For static assets that might change
+      - ./public:/app/public 
+     
 
 networks:
   my_custom_network:
-    external: true
+    driver: bridge
