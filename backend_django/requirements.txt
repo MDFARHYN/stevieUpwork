@@ -1,4 +1,5 @@
 Django
+gunicorn
 djangorestframework
 djangorestframework-simplejwt[crypto]
 django-cors-headers
