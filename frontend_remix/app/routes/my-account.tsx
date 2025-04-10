@@ -3,7 +3,7 @@ import { useShopifyProducts } from '../../components/hooks/useShopifyProducts';
 import { useAmazonProducts } from '../../components/hooks/useAmazonProducts';
 import { Link } from '@remix-run/react';
 
-const base_domain = "https://backend.stevie.farhyn.com";
+const base_domain = "https://backendstevie.farhyn.com";
 
 export default function AccountPage() {
   // Shopify products hooks

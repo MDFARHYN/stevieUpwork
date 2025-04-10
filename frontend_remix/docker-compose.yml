@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
-    container_name: frontend_remix
+    container_name: frontend_remix_stevie
     restart: always
     environment:
       - NODE_ENV=production

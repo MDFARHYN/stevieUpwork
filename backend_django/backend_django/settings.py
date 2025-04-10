@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-nd7%1xauc4-46ewuiisrq!z7q(cngm36^+t!4llpx4dgtbte5x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.farhyn.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['backendstevie.farhyn.com','.farhyn.com', 'localhost', '127.0.0.1']
 
 
 
@@ -187,3 +187,7 @@ CORS_ALLOW_ALL_ORIGINS = True  # Only use this for development!
 CORS_ALLOW_CREDENTIALS = True
 
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://backendstevie.farhyn.com",
+    "https://stevie-upwork-git-main-farhanahmed1360gmailcoms-projects.vercel.app/",  # Include this if you also access the backend directly via IP
+]
