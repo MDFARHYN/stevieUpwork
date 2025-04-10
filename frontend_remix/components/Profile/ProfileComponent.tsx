@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-
-const BaseDomain = "http://localhost:8000";
+ 
 
 // Define interface for sidebar items
 interface SidebarItem {

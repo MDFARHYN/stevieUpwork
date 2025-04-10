@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // API URL configuration
-const API_URL = 'http://localhost:8000/api';
+const API_URL = 'https://backend.stevie.farhyn.com/api';
 
 // Utility function to set token in cookies
 const setTokenInCookie = (tokenType: 'access_token' | 'refresh_token', token: string) => {

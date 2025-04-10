@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_stevie
+    ports:
+      - "8001:8001"
+    
+    volumes:
+      - static_volume:/app/staticfiles
+    networks:
+      - my_custom_network
+
+volumes:
+  static_volume:
+
+networks:
+  my_custom_network:
+    external: true

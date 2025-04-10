@@ -4,7 +4,7 @@ import { Link, useNavigate } from "@remix-run/react";
 import type { FormEvent } from "react";
 
 // Define the API URL - adjust this based on your backend configuration
-const API_URL = "http://localhost:8000/api/members";
+const API_URL = "https://backend.stevie.farhyn.com/api/members";
 
 export default function Register() {
   const [firstName, setFirstName] = useState<string>("");

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  remix:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stevie-remix-app
+    ports:
+      - "3001:3001"
+    
+    networks:
+      - my_custom_network
+
+networks:
+  my_custom_network:
+    external: true

@@ -1,0 +1,138 @@
+name: StevieUpwork CI/CD
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up SSH key
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        
+    - name: Add host key to known hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+        
+    - name: Deploy to server
+      env:
+        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+       
+      run: |
+        # Create deployment script
+        cat > deploy.sh << 'EOF'
+        #!/bin/bash
+        set -e
+        
+        echo "==== Starting deployment process ===="
+        
+        echo "Stopping and removing specific containers..."
+        # Stop and remove frontend container
+        sudo docker stop stevie-remix-app || echo "Frontend container not running"
+        sudo docker rm stevie-remix-app || echo "Frontend container not found"
+        
+        # Stop and remove backend container
+        sudo docker stop django_stevie || echo "Backend container not running"
+        sudo docker rm django_stevie || echo "Backend container not found"
+        
+        echo "Removing related images and volumes..."
+        # Remove specific images (using grep to find related images)
+        sudo docker images | grep "stevie-remix-app\|django_stevie" | awk '{print $3}' | xargs -r sudo docker rmi -f || echo "No matching images found"
+        
+        echo "Checking for custom network..."
+        if ! sudo docker network ls | grep my_custom_network; then
+          echo "Creating custom network..."
+          sudo docker network create my_custom_network
+        else
+          echo "Custom network already exists."
+        fi
+        
+        echo "Removing previous repository..."
+        if [ -d "/var/www/stevieUpwork" ]; then
+          rm -rf /var/www/stevieUpwork || sudo rm -rf /var/www/stevieUpwork
+        fi
+        
+        echo "Clearing Docker builder cache..."
+        sudo docker builder prune -af
+        
+        echo "Cloning fresh repository..."
+        cd /var/www/
+        # Use SSH URL instead of HTTPS
+        git clone git@github.com:MDFARHYN/stevieUpwork.git
+        
+        # Check if the clone was successful and directory exists
+        if [ ! -d "/var/www/stevieUpwork" ]; then
+          echo "Error: Repository clone failed or directory name is different."
+          exit 1
+        fi
+        
+        cd /var/www/stevieUpwork
+        
+        # Check if backend directory exists
+        if [ -d "/var/www/stevieUpwork/backend_django" ]; then
+          echo "Building and starting backend..."
+          cd /var/www/stevieUpwork/backend_django
+          sudo docker-compose build --no-cache
+          sudo docker-compose up -d
+        else
+          echo "Warning: Backend directory not found. Skipping backend deployment."
+        fi
+        
+        # Check if frontend directory exists
+        if [ -d "/var/www/stevieUpwork/frontend_remix" ]; then
+          echo "Building and starting frontend..."
+          cd /var/www/stevieUpwork/frontend_remix
+          sudo docker-compose build --no-cache
+          sudo docker-compose up -d
+        else
+          echo "Warning: Frontend directory not found. Skipping frontend deployment."
+        fi
+        
+        echo "Cleaning up unused Docker resources..."
+        # Remove all unused containers
+        sudo docker container prune -f
+        
+        # Remove all unused networks
+        sudo docker network prune -f
+        
+        # Remove all dangling images
+        sudo docker image prune -f
+        
+        # Remove all unused volumes
+        sudo docker volume prune -f
+        
+        # Clean build cache
+        sudo docker builder prune -af
+        
+        # Remove all system caches (be careful, this is aggressive)
+        sudo docker system prune -af --volumes
+        
+        echo "Deployment completed!"
+        echo "Running containers:"
+        sudo docker ps
+        
+        echo "Remaining images:"
+        sudo docker images
+        
+        echo "Remaining volumes:"
+        sudo docker volume ls
+        
+        echo "Disk usage after cleanup:"
+        sudo docker system df
+        EOF
+        
+        # Copy the deployment script to the server
+        scp deploy.sh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:~/deploy.sh
+        
+        # Make it executable and run it
+        ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "chmod +x ~/deploy.sh && ~/deploy.sh"
