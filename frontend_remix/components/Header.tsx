@@ -69,7 +69,7 @@ export default function Header() {
           
           {/* Desktop Navigation - hidden on mobile */}
           <nav className="hidden md:flex space-x-8">
-            <a 
+            {/*<a 
               href="#features" 
               onClick={(e) => scrollToSection(e, 'features')} 
               className="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium transition duration-150"
@@ -82,7 +82,7 @@ export default function Header() {
               className="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium transition duration-150"
             >
               Testimonials
-            </a>
+            </a>*/}
           
              <>
               <Link 
@@ -91,14 +91,15 @@ export default function Header() {
               >
                 Login
               </Link>
+              {/*
               <Link 
                 to="/register" 
                 className="bg-indigo-600 text-white px-4 py-2 rounded text-sm font-medium"
               >
                 Get Started
-              </Link>
+              </Link>*/}
              </>
-       
+              {/*
             <>
               <Link 
                 to="/my-account" 
@@ -112,7 +113,7 @@ export default function Header() {
               >
                 Logout
               </button>
-            </>
+            </>*/}
        
           </nav>
         </div>
@@ -130,16 +131,18 @@ export default function Header() {
                   >
                     Login
                   </Link>
+
+                  {/*
                   <Link 
                     to="/register" 
                     className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Register
-                  </Link>
+                  </Link>*/}
                 </>
              
-                <>
+             {/*   <>
                   <Link 
                     to="/my-account" 
                     className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md"
@@ -154,7 +157,7 @@ export default function Header() {
                     Logout
                   </button>
                 </>
-              
+                */}
             </div>
           </div>
         )}
